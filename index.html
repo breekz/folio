@@ -9,9 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ============================================================================
-   BRYANT CASTRO — illustrated + animated cut.
-   Same voice as the rebrand; warmer palette; minimalist illustrations that
-   animate an idea (Bryan-Low style — motion with purpose, brand stays simple).
+   BRYANT CASTRO — illustrated + animated cut. 10-slide structure.
+   Ported carefully from the Figma working file (frame-by-frame).
    Nav: ← → / space · Home/End · F fullscreen · G index · R replay · click
    ========================================================================== */
 :root{
@@ -38,6 +37,7 @@ h2.head{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spac
 h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;line-height:1.05}
 .kicker{font-family:'Inter';font-size:.74rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:.7em}
 .kicker::before{content:"";width:26px;height:2px;background:currentColor}
+.kicker.nodash::before{display:none}
 .dark .kicker,.pop .kicker{color:#fff}
 .lead{font-size:clamp(1.05rem,1.5vw,1.45rem);line-height:1.5;color:var(--ink-2)}
 .dark .lead{color:rgba(244,239,227,.72)}.pop .lead{color:rgba(255,255,255,.9)}
@@ -47,10 +47,6 @@ h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-
 .counter{position:fixed;bottom:26px;right:30px;z-index:50;font-family:'Inter';font-size:.72rem;letter-spacing:.1em;color:#fff;mix-blend-mode:difference}
 .chip{position:absolute;top:calc(var(--pad) - 8px);left:var(--pad);z-index:6;font-family:'Inter';font-size:.64rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:flex;gap:.7em}
 .chip b{color:var(--accent)}.dark .chip,.pop .chip{color:rgba(255,255,255,.5)}.dark .chip b,.pop .chip b{color:#fff}
-.replay{position:absolute;top:calc(var(--pad) - 14px);right:var(--pad);z-index:6;font-family:'Inter';font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:99px;padding:.5em 1em;cursor:pointer}
-.replay:hover{border-color:var(--accent);color:var(--accent)}.dark .replay{border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)}
-.foot{position:absolute;left:var(--pad);bottom:calc(var(--pad) - 12px);z-index:6;font-family:'Inter';font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.dark .foot,.pop .foot{color:rgba(255,255,255,.4)}
 .hint{position:fixed;bottom:24px;left:30px;z-index:50;font-family:'Inter';font-size:.64rem;color:rgba(255,255,255,.55);mix-blend-mode:difference;pointer-events:none}.hint b{color:#fff}
 .fs-btn{position:fixed;bottom:22px;right:86px;z-index:50;width:34px;height:34px;border-radius:9px;border:1px solid rgba(160,150,140,.4);background:rgba(255,255,255,.06);color:#fff;cursor:pointer;display:grid;place-items:center;mix-blend-mode:difference}
 .tile{border-top:2px solid var(--ink);padding-top:14px}.dark .tile{border-color:var(--paper)}
@@ -59,8 +55,11 @@ h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-
 .grid{display:grid;gap:clamp(16px,1.8vw,30px)}.g-2{grid-template-columns:1fr 1fr}.g-3{grid-template-columns:repeat(3,1fr)}.g-4{grid-template-columns:repeat(4,1fr)}
 .row{display:flex}.wrap{flex-wrap:wrap}.gap-s{gap:10px}.gap{gap:20px}.gap-l{gap:40px}.stack{display:flex;flex-direction:column}.between{justify-content:space-between}.center{align-items:center}
 .wordmark{font-family:'Bricolage Grotesque';font-weight:700;font-size:clamp(1.05rem,1.4vw,1.4rem);color:var(--ink-2)}
+.dark .wordmark{color:rgba(244,239,227,.82)}
 .shot{border-radius:6px;overflow:hidden;background:#fff;box-shadow:0 40px 80px -40px rgba(26,21,18,.4)}
 .pillbox{border:1px solid var(--line);border-radius:8px;padding:.6em 1em;font-size:.88rem}.dark .pillbox{border-color:rgba(255,255,255,.2);color:var(--paper)}
+.avatar{width:60px;height:60px;border-radius:50%;object-fit:cover;object-position:center;flex:none;background:#fff}
+.ph{border:1.5px dashed var(--line);border-radius:14px;display:grid;place-items:center;min-height:60vh;width:100%}
 .index{position:fixed;inset:0;z-index:80;background:rgba(12,9,7,.9);backdrop-filter:blur(8px);display:none;padding:6vh 6vw;overflow:auto}.index.open{display:block}
 .index h4{font-family:'Inter';font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:24px}
 .index .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
@@ -73,124 +72,78 @@ h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-
 <div class="progress" id="progress"></div>
 <div class="stage" id="stage">
 
-<!-- 01 COVER · trust-mark -->
-<section class="slide active" data-slide="1" data-label="Cover" data-anim="cover">
-  <span class="chip"><b>Bryant Castro</b> · Design Leader</span>
-  <svg class="mark" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:visible">
-    <g class="mark-orbit">
-      <circle class="ring" cx="1423" cy="442" r="158" fill="none" stroke="var(--gold)" stroke-width="2"/>
-      <circle class="ring" cx="1338" cy="589" r="158" fill="none" stroke="var(--coral)" stroke-width="2"/>
-      <circle class="ring" cx="1509" cy="589" r="158" fill="none" stroke="var(--teal)" stroke-width="2"/>
+<!-- 01 COVER · headline + org-network illustration (dark) -->
+<section class="slide active dark" data-slide="1" data-label="Cover" data-anim="network">
+  <svg class="net" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:visible">
+    <g class="net-orbit">
+      <g class="net-links" stroke="rgba(255,255,255,.22)" stroke-width="1.5" fill="none">
+        <path d="M1376,527 L1376,189"/><path d="M1376,527 L1710,337"/><path d="M1376,527 L1710,717"/><path d="M1376,527 L1376,886"/><path d="M1376,527 L1042,717"/><path d="M1376,527 L1042,337"/>
+        <path d="M1376,189 L1710,337"/><path d="M1710,337 L1710,717"/><path d="M1710,717 L1376,886"/><path d="M1376,886 L1042,717"/><path d="M1042,717 L1042,337"/><path d="M1042,337 L1376,189"/>
+      </g>
+      <g class="net-nodes">
+        <circle class="net-n" cx="1376" cy="189" r="25" fill="var(--night)" stroke="var(--coral)" stroke-width="2"/>
+        <circle class="net-n" cx="1710" cy="337" r="25" fill="var(--night)" stroke="var(--teal)" stroke-width="2"/>
+        <circle class="net-n" cx="1710" cy="717" r="25" fill="var(--night)" stroke="var(--gold)" stroke-width="2"/>
+        <circle class="net-n" cx="1376" cy="886" r="25" fill="var(--night)" stroke="var(--coral)" stroke-width="2"/>
+        <circle class="net-n" cx="1042" cy="717" r="25" fill="var(--night)" stroke="var(--teal)" stroke-width="2"/>
+        <circle class="net-n" cx="1042" cy="337" r="25" fill="var(--night)" stroke="var(--gold)" stroke-width="2"/>
+      </g>
+      <circle class="net-origin" cx="1376" cy="527" r="76" fill="var(--night)" stroke="rgba(255,255,255,.26)" stroke-width="1.5"/>
     </g>
-    <text class="mk-label" x="1419" y="540" text-anchor="middle" fill="var(--muted)" font-family="Inter,sans-serif" font-size="10" font-weight="600" letter-spacing="2.5">THE ANATOMY OF TRUST</text>
-    <text class="mk-label" x="1423" y="395" text-anchor="middle" fill="var(--gold)" font-family="Inter,sans-serif" font-size="13" font-weight="600" letter-spacing="1.5">HONEST</text>
-    <text class="mk-label" x="1269" y="634" text-anchor="middle" fill="var(--coral)" font-family="Inter,sans-serif" font-size="13" font-weight="600" letter-spacing="1.5">LEGIBLE</text>
-    <text class="mk-label" x="1566" y="646" text-anchor="middle" fill="var(--teal)" font-family="Inter,sans-serif" font-size="13" font-weight="600" letter-spacing="1.5">RESILIENT</text>
+    <text class="net-origin-t" x="1376" y="531" text-anchor="middle" fill="var(--coral)" font-family="Inter,sans-serif" font-size="11" font-weight="600" letter-spacing="2.5">A DESIGN ORGANIZATION</text>
+    <g class="net-labels" font-family="Inter,sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,.7)">
+      <text x="1376" y="150" text-anchor="middle">People</text>
+      <text x="1748" y="343" text-anchor="start">Hiring</text>
+      <text x="1748" y="723" text-anchor="start">Systems</text>
+      <text x="1376" y="940" text-anchor="middle">Rituals</text>
+      <text x="1006" y="723" text-anchor="end">Standards</text>
+      <text x="1006" y="343" text-anchor="end">Culture</text>
+    </g>
   </svg>
   <div class="inner" style="z-index:1">
-    <div>
-      <div class="kicker" data-cv>Money · Identity · Travel · Home</div>
-      <h1 class="huge" style="margin:.22em 0 .34em">
+    <div style="max-width:min(46vw,860px)">
+      <h1 class="huge" style="font-size:clamp(2.6rem,5.6vw,6rem);margin:0 0 .8em">
         <span class="lmask"><span class="ll">I design the</span></span>
         <span class="lmask"><span class="ll">products people</span></span>
         <span class="lmask"><span class="ll"><span class="serif accent-t">have to trust</span>.</span></span>
       </h1>
-      <p class="lead" data-cv style="max-width:42ch">A decade making complex, high-stakes products feel effortless — and building the teams that keep them that way.</p>
-    </div>
-  </div>
-  <div class="foot">Bryant Castro · Design Leader</div>
-</section>
-
-<!-- 02 PROPOSITION -->
-<section class="slide dark" data-slide="2" data-label="Why me" data-anim="network">
-  <span class="chip"><b>01</b> The proposition</span>
-  <svg class="net" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:visible">
-    <g class="net-orbit">
-      <g class="net-links" stroke="rgba(255,255,255,.28)" stroke-width="1.5" fill="none">
-        <path d="M1372.5,531 L1372.5,293"/><path d="M1372.5,531 L1608.5,397"/><path d="M1372.5,531 L1608.5,665"/><path d="M1372.5,531 L1372.5,784"/><path d="M1372.5,531 L1137,665"/><path d="M1372.5,531 L1137,397"/>
-        <path d="M1372.5,293 L1608.5,397"/><path d="M1608.5,665 L1372.5,784"/><path d="M1137,665 L1137,397"/>
-      </g>
-      <g class="net-nodes">
-        <circle class="net-n" cx="1372.5" cy="293" r="17.5" fill="var(--night)" stroke="var(--coral)" stroke-width="2"/>
-        <circle class="net-n" cx="1608.5" cy="397" r="17.5" fill="var(--night)" stroke="var(--teal)" stroke-width="2"/>
-        <circle class="net-n" cx="1608.5" cy="665" r="17.5" fill="var(--night)" stroke="var(--gold)" stroke-width="2"/>
-        <circle class="net-n" cx="1372.5" cy="784" r="17.5" fill="var(--night)" stroke="var(--coral)" stroke-width="2"/>
-        <circle class="net-n" cx="1137" cy="665" r="18" fill="var(--night)" stroke="var(--teal)" stroke-width="2"/>
-        <circle class="net-n" cx="1137" cy="397" r="18" fill="var(--night)" stroke="var(--gold)" stroke-width="2"/>
-      </g>
-      <circle class="net-origin" cx="1372.5" cy="531" r="53.5" fill="var(--night)" stroke="rgba(255,255,255,.26)" stroke-width="1.5"/>
-    </g>
-    <text class="net-origin-t" x="1372.5" y="535" text-anchor="middle" fill="var(--coral)" font-family="Inter,sans-serif" font-size="11" font-weight="600" letter-spacing="3">A DESIGN ORGANIZATION</text>
-    <g class="net-labels" font-family="Inter,sans-serif" font-size="13.5" font-weight="500" fill="rgba(255,255,255,.75)">
-      <text x="1372.5" y="256" text-anchor="middle">People</text>
-      <text x="1634" y="402" text-anchor="start">Hiring</text>
-      <text x="1634" y="671" text-anchor="start">Systems</text>
-      <text x="1372.5" y="834" text-anchor="middle">Rituals</text>
-      <text x="1111" y="671" text-anchor="end">Standards</text>
-      <text x="1111" y="402" text-anchor="end">Culture</text>
-    </g>
-  </svg>
-  <div class="inner" style="z-index:1">
-    <div class="kicker" data-cv>What you actually hire</div>
-    <h2 class="head" style="margin-top:.4em;max-width:22ch">
-      <span class="lmask"><span class="ll">Hire a designer, get</span></span>
-      <span class="lmask"><span class="ll">better screens.</span></span>
-      <span class="lmask"><span class="ll">Hire me, get a</span></span>
-      <span class="lmask"><span class="ll"><span class="serif" style="color:var(--coral)">design organization.</span></span></span>
-    </h2>
-    <p class="lead" data-cv style="max-width:44ch;margin-top:1.4em">I ship the product <em>and</em> build the practice that keeps shipping it — the systems, the hires, and the culture that outlast any one launch.</p>
-  </div>
-</section>
-
-<!-- 03 PROOF -->
-<section class="slide" data-slide="3" data-label="Proof" data-anim="count">
-  <span class="chip"><b>02</b> The track record</span>
-  <button class="replay">↻ Replay</button>
-  <div class="inner">
-    <div class="kicker up">A decade, quantified</div>
-    <h2 class="head up" style="margin:.3em 0 1.1em;max-width:16ch">Built to scale, proven at scale.</h2>
-    <div class="grid g-4" style="margin-bottom:2.2em">
-      <div class="tile up"><div class="v"><span data-count="40" data-suf="M+">0</span></div><div class="l">people reached, Asia &amp; LatAm</div></div>
-      <div class="tile up"><div class="v"><span data-count="10" data-suf="+">0</span></div><div class="l">years designing &amp; leading</div></div>
-      <div class="tile up"><div class="v"><span data-count="4">0</span></div><div class="l">design teams built &amp; scaled</div></div>
-      <div class="tile up"><div class="v"><span data-count="4">0</span></div><div class="l">countries — MX·US·VN·TH</div></div>
-    </div>
-    <div class="up"><p class="kicker" style="color:var(--muted);margin-bottom:14px">Selected companies</p>
-      <div class="row wrap" style="gap:12px 28px;align-items:baseline">
-        <span class="wordmark">Bitso</span><span class="wordmark">Casai</span><span class="wordmark">TrueMoney</span><span class="wordmark">AirAsia</span><span class="wordmark">21st&nbsp;Century&nbsp;Fox</span><span class="wordmark">Banco&nbsp;Azteca</span><span class="wordmark">A24</span><span class="wordmark">ROKT</span>
+      <div class="row center gap" data-cv style="max-width:600px">
+        <img class="avatar" src="deck-life-assets/bri-avatar.png" alt="Bryant Castro">
+        <p style="font-size:1.02rem;line-height:1.5;color:rgba(244,239,227,.72);margin:0">A decade making complex, high-stakes products feel effortless, and building the teams that keep them that way.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 04 CONCEPT · the design threshold (Bryan-Low style animated chart) -->
-<section class="slide dark" data-slide="4" data-label="Design compounds" data-anim="curve">
-  <span class="chip"><b>03</b> A point of view</span>
-  <button class="replay">↻ Replay</button>
+<!-- 02 PROOF · built to scale -->
+<section class="slide" data-slide="2" data-label="Built to scale" data-anim="count">
   <div class="inner">
-    <div class="kicker up" style="color:var(--coral)">The compounding curve</div>
-    <h2 class="head up" style="margin:.3em 0 .35em;max-width:18ch">Design compounds — <span class="serif" style="color:var(--coral)">slowly, then all at once.</span></h2>
-    <p class="lead up" style="max-width:48ch;margin-bottom:.2em">For a while it looks like overhead. Then it becomes the reason the business scaled — and that’s not a thing you can buy back later.</p>
-    <svg class="chart" viewBox="0 0 1000 300" preserveAspectRatio="none" style="width:100%;height:36vh;margin-top:1em;overflow:visible">
-      <defs><linearGradient id="cvfill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF5A36" stop-opacity=".32"/><stop offset="1" stop-color="#FF5A36" stop-opacity="0"/></linearGradient></defs>
-      <line x1="60" y1="268" x2="985" y2="268" stroke="rgba(255,255,255,.16)" stroke-width="1.5"/>
-      <line class="cv-thr" x1="60" y1="130" x2="985" y2="130" stroke="rgba(255,255,255,.32)" stroke-width="1.5" stroke-dasharray="4 7"/>
-      <text class="cv-thr" x="66" y="120" fill="rgba(255,255,255,.5)" font-family="Inter,sans-serif" font-size="12.5" letter-spacing="2">THE THRESHOLD</text>
-      <path class="cv-area" d="M60,258 C430,254 580,246 720,196 S910,60 980,30 L980,268 L60,268 Z" fill="url(#cvfill)"/>
-      <path class="cv-line" d="M60,258 C430,254 580,246 720,196 S910,60 980,30" fill="none" stroke="var(--coral)" stroke-width="4" stroke-linecap="round"/>
-      <circle class="cv-mark" cx="748" cy="130" r="6" fill="#fff" opacity="0"/>
-      <circle class="cv-dot" r="10" fill="#fff" opacity="0" style="filter:drop-shadow(0 0 9px rgba(255,90,54,.95))"/>
-    </svg>
-    <div class="row between up" style="margin-top:8px"><span class="mono muted" style="font-size:.72rem;letter-spacing:.1em">TIME &amp; INVESTMENT →</span><span class="mono muted" style="font-size:.72rem;letter-spacing:.1em">↑ VALUE TO THE BUSINESS</span></div>
+    <div class="kicker up">A decade, quantified</div>
+    <h2 class="head up" style="margin:.3em 0 1.1em;max-width:16ch">Built to scale.</h2>
+    <div class="grid g-3 up-grid" style="margin-bottom:2.2em;max-width:1200px">
+      <div class="tile up"><div class="v"><span data-count="40" data-suf="M+">0</span></div><div class="l">people reached, Asia &amp; LatAm</div></div>
+      <div class="tile up"><div class="v"><span data-count="10" data-suf="+">0</span></div><div class="l">years designing</div></div>
+      <div class="tile up"><div class="v"><span data-count="4">0</span></div><div class="l">design teams led</div></div>
+    </div>
+    <div class="up"><p class="kicker nodash" style="color:var(--muted);margin-bottom:14px">Selected companies</p>
+      <div class="row wrap" style="gap:12px 28px;align-items:baseline">
+        <span class="wordmark">Incode</span><span class="wordmark">Bitso</span><span class="wordmark">Casai</span><span class="wordmark">TrueMoney</span><span class="wordmark">AirAsia</span><span class="wordmark">21st&nbsp;Century&nbsp;Fox</span><span class="wordmark">Banco&nbsp;Azteca</span><span class="wordmark">A24</span><span class="wordmark">ROKT</span>
+      </div>
+    </div>
+    <!-- Backed by: real tier-1 investors behind Casai (a16z, Kaszek), Bitso
+         (Tiger Global, Coatue, Paradigm) and Incode (General Atlantic, SoftBank) -->
+    <div class="up" style="margin-top:1.6em"><p class="kicker nodash" style="color:var(--muted);margin-bottom:14px">Backed by</p>
+      <div class="row wrap" style="gap:12px 28px;align-items:baseline">
+        <span class="wordmark">a16z</span><span class="wordmark">SoftBank</span><span class="wordmark">General&nbsp;Atlantic</span><span class="wordmark">Tiger&nbsp;Global</span><span class="wordmark">Coatue</span><span class="wordmark">Paradigm</span><span class="wordmark">Kaszek</span>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- 05 OPERATING MODEL · three animated diagrams -->
-<section class="slide" data-slide="5" data-label="Operating model" data-anim="model">
-  <span class="chip"><b>04</b> The operating model</span>
-  <button class="replay">↻ Replay</button>
+<!-- 03 OPERATING MODEL · three animated diagrams -->
+<section class="slide" data-slide="3" data-label="Operating model" data-anim="model">
   <div class="inner">
-    <div class="kicker up">How I create value</div>
+    <div class="kicker up">The operating model</div>
     <h2 class="head up" style="margin:.3em 0 1.4em;max-width:22ch">Clarity. Craft. <span class="serif accent-t">Compounding.</span></h2>
     <div class="grid g-3">
       <div class="up">
@@ -220,114 +173,9 @@ h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-
   </div>
 </section>
 
-<!-- 06 DIVIDER WORK -->
-<section class="slide dark" data-slide="6" data-label="§ Selected work" data-anim="divmark">
-  <span class="chip"><b>05</b> Selected work</span>
-  <svg class="bgmark" viewBox="0 0 720 560" style="position:absolute;right:3%;top:52%;transform:translateY(-50%);width:min(46%,780px);z-index:0;overflow:visible">
-    <text class="cst-lbl" x="360" y="24" text-anchor="middle" fill="var(--coral)" font-family="Inter,sans-serif" font-size="11" font-weight="600" letter-spacing="3">A CONNECTED BODY OF WORK</text>
-    <g class="cst-links" stroke="rgba(255,255,255,.18)" stroke-width="1.5" fill="none">
-      <path d="M210,150 L380,110"/><path d="M380,110 L540,200"/><path d="M540,200 L604,352"/><path d="M604,352 L430,440"/><path d="M430,440 L240,408"/><path d="M240,408 L146,270"/><path d="M146,270 L210,150"/>
-      <path d="M380,110 L430,440"/><path d="M210,150 L540,200"/><path d="M240,408 L604,352"/>
-    </g>
-    <g class="cst-nodes">
-      <circle cx="210" cy="150" r="9" fill="var(--coral)"/><circle cx="380" cy="110" r="9" fill="var(--teal)"/><circle cx="540" cy="200" r="9" fill="var(--gold)"/><circle cx="604" cy="352" r="9" fill="var(--coral)"/><circle cx="430" cy="440" r="9" fill="var(--teal)"/><circle cx="240" cy="408" r="9" fill="var(--gold)"/><circle cx="146" cy="270" r="9" fill="var(--coral)"/>
-    </g>
-    <g class="cst-labels" font-family="Inter,sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,.78)">
-      <text x="210" y="132" text-anchor="middle">Bitso</text>
-      <text x="380" y="92" text-anchor="middle">Casai</text>
-      <text x="558" y="204" text-anchor="start">TrueMoney</text>
-      <text x="622" y="356" text-anchor="start">AirAsia</text>
-      <text x="430" y="466" text-anchor="middle">21st Century Fox</text>
-      <text x="240" y="434" text-anchor="middle">Banco Azteca</text>
-      <text x="128" y="274" text-anchor="end">ROKT</text>
-    </g>
-  </svg>
-  <div class="inner between" style="z-index:1">
-    <div class="kicker" data-cv>Chapter one</div>
-    <h2 class="display" style="font-size:clamp(3rem,9vw,9rem)"><span class="lmask"><span class="ll">Selected <span class="serif" style="color:var(--coral)">work.</span></span></span></h2>
-    <p class="lead" data-cv style="max-width:44ch">Three products where trust was the whole game — and where I owned the design and the team behind it.</p>
-  </div>
-</section>
-
-<!-- 07 BITSO -->
-<section class="slide" data-slide="7" data-label="Bitso" data-anim="entrance">
-  <span class="chip"><b>06</b> Bitso · Director of UX, Consumer · 2022</span>
-  <div class="inner">
-    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(28px,4vw,68px);align-items:center">
-      <div>
-        <div class="kicker up">Crypto · Latin America’s largest exchange</div>
-        <h2 class="head up" style="margin:.3em 0 .5em;max-width:15ch">Made crypto <span class="serif accent-t">worth trusting.</span></h2>
-        <p class="lead up" style="max-width:34ch;margin-bottom:1.4em">Led consumer design as Bitso made crypto useful — and took it into a new market without losing a shred of trust.</p>
-        <div class="grid g-3 up" style="gap:20px">
-          <div class="tile"><div class="v">1M</div><div class="l">customers, Colombia’s first month</div></div>
-          <div class="tile"><div class="v">7</div><div class="l">designers I led</div></div>
-          <div class="tile"><div class="v">3</div><div class="l">retention products</div></div>
-        </div>
-      </div>
-      <div class="up shot"><img src="deck-life-assets/bitso.png" alt="Bitso" style="width:100%;display:block"></div>
-    </div>
-  </div>
-</section>
-
-<!-- 08 CASAI -->
-<section class="slide" data-slide="8" data-label="Casai" data-anim="entrance">
-  <span class="chip"><b>07</b> Casai · UX Manager · 2020–21</span>
-  <div class="inner">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,60px);align-items:center">
-      <div>
-        <div class="kicker up">Hospitality · a16z-backed</div>
-        <h2 class="head up" style="margin:.3em 0 .5em;max-width:15ch">Built a design culture <span class="serif accent-t">from zero.</span></h2>
-        <p class="lead up" style="max-width:34ch;margin-bottom:1.4em">Hired to fix the fundamentals — I left a design system, a concierge app, a research practice, and a team to run it.</p>
-        <div class="grid g-3 up" style="gap:20px">
-          <div class="tile"><div class="v">63→600+</div><div class="l">units in my tenure</div></div>
-          <div class="tile"><div class="v">~$8M</div><div class="l">ARR</div></div>
-          <div class="tile"><div class="v">4.8</div><div class="l">guest CSAT</div></div>
-        </div>
-      </div>
-      <div class="up row gap" style="align-items:stretch">
-        <div class="shot" style="flex:1;display:flex"><img src="deck-life-assets/casai-app.png" alt="Casai app" style="width:100%;object-fit:contain"></div>
-        <div class="shot" style="flex:1;display:flex"><img src="deck-life-assets/casai-web.png" alt="Casai web" style="width:100%;object-fit:cover"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 09 AIRASIA · motion path -->
-<section class="slide dark" data-slide="9" data-label="AirAsia" data-anim="journey">
-  <span class="chip"><b>08</b> AirAsia · Workshop facilitation · 2019</span>
-  <button class="replay">↻ Replay</button>
-  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0" viewBox="0 0 1280 720" preserveAspectRatio="none">
-    <path id="aaroute" d="M120,600 C380,560 430,300 660,360 S980,300 1050,205" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1.5" stroke-dasharray="3 9"/>
-    <circle cx="120" cy="600" r="6" fill="#fff"/>
-    <circle id="aadot" r="11" fill="var(--coral)" style="filter:drop-shadow(0 0 10px rgba(255,90,54,.9))"/>
-  </svg>
-  <div class="aa-panel" style="position:absolute;right:var(--pad);top:calc(var(--pad) + 12px);width:min(34%,420px);z-index:3">
-    <div style="position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;box-shadow:0 30px 70px -30px rgba(0,0,0,.7)">
-      <img class="aa-img" src="deck-airasia-assets/room.jpg" alt="Workshop &amp; voting" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1">
-      <img class="aa-img" src="deck-airasia-assets/sketches.jpg" alt="Solution sketches" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0">
-      <img class="aa-img" src="deck-airasia-assets/mvp-planner.png" alt="Final prototype" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0d0d12;opacity:0">
-    </div>
-    <div class="row between" style="margin-top:12px">
-      <span class="aa-cap mono" style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--coral)">01 · Vote</span>
-      <span class="aa-cap mono" style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35)">02 · Sketch</span>
-      <span class="aa-cap mono" style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35)">03 · Prototype</span>
-    </div>
-  </div>
-  <div class="inner between" style="z-index:2">
-    <span></span>
-    <div>
-      <div class="kicker" data-cv style="color:var(--coral)">Travel · cross-functional design sprint</div>
-      <h2 class="head" style="margin:.3em 0 .5em;max-width:14ch">I run the <span class="serif" style="color:var(--coral)">hardest</span> rooms.</h2>
-      <p class="lead" data-cv style="max-width:34ch;margin-bottom:1.2em">Four days. Engineers, commercial, data and C-level. From a divided room to a build-ready MVP — and they owned the decision.</p>
-      <div class="row wrap gap-s" data-cv><span class="pillbox">Strategy → prototype in 4 days</span><span class="pillbox">Democratic prioritization</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- 10 MULTIPLIER · one → many -->
-<section class="slide" data-slide="10" data-label="The multiplier" data-anim="multiplier">
+<!-- 04 MULTIPLIER · one → many -->
+<section class="slide" data-slide="4" data-label="The multiplier" data-anim="multiplier">
   <span class="chip"><b>09</b> Design leadership</span>
-  <button class="replay">↻ Replay</button>
   <svg class="tree" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;overflow:visible">
     <g class="tree-orbit">
     <g class="edges" stroke="var(--line)" stroke-width="2" fill="none">
@@ -345,7 +193,7 @@ h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-
     <div style="max-width:640px">
       <div class="kicker up">The real product is the team</div>
       <h2 class="head up" style="margin:.3em 0 .6em;max-width:14ch">Systems over <span class="serif accent-t">heroics</span>.</h2>
-      <p class="lead up" style="max-width:32ch;margin-bottom:1.2em">I scale design orgs that run without me — hiring bars, career ladders, governance and rituals that raise the whole team.</p>
+      <p class="lead up" style="max-width:34ch;margin-bottom:1.2em">I scale design orgs that can run without me (the ultimate stress test).</p>
       <div class="grid g-2 up" style="gap:10px;max-width:480px">
         <span class="pillbox">Hiring &amp; career ladders</span><span class="pillbox">Design-system governance</span>
         <span class="pillbox">DesignOps &amp; rituals</span><span class="pillbox">OKRs &amp; performance</span>
@@ -354,8 +202,8 @@ h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-
   </div>
 </section>
 
-<!-- 11 PRINCIPLES -->
-<section class="slide" data-slide="11" data-label="Principles" data-anim="entrance">
+<!-- 05 PRINCIPLES -->
+<section class="slide" data-slide="5" data-label="Principles" data-anim="entrance">
   <span class="chip"><b>10</b> How I lead</span>
   <div class="inner">
     <div class="kicker up">The operating principles</div>
@@ -371,9 +219,75 @@ h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-
   </div>
 </section>
 
-<!-- 12 CLOSE -->
-<section class="slide pop" data-slide="12" data-label="Closing" data-anim="ripple">
-  <span class="chip"><b>11</b> Let’s talk</span>
+<!-- 06 DIVIDER · selected work (centered, text only) -->
+<section class="slide dark" data-slide="6" data-label="Selected work" data-anim="lines">
+  <div class="inner" style="text-align:center;align-items:center;justify-content:center">
+    <div data-cv style="font-family:'Inter';font-size:.72rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--coral);margin-bottom:1.6em">Chapter one</div>
+    <h2 class="display" style="font-size:clamp(3rem,9vw,9rem)"><span class="lmask"><span class="ll">Selected <span class="serif" style="color:var(--coral)">work.</span></span></span></h2>
+  </div>
+</section>
+
+<!-- 07 BITSO -->
+<section class="slide" data-slide="7" data-label="Bitso" data-anim="entrance">
+  <span class="chip"><b>06</b> Bitso · Director of UX, Consumer · 2022</span>
+  <div class="inner">
+    <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(28px,4vw,68px);align-items:center">
+      <div>
+        <div class="kicker up">Crypto · Latin America’s largest exchange</div>
+        <h2 class="head up" style="margin:.3em 0 .5em;max-width:15ch">Made crypto <span class="serif accent-t">worth trusting.</span></h2>
+        <p class="lead up" style="max-width:34ch;margin-bottom:1.4em">Led consumer design as Bitso was expanding to new markets.</p>
+        <div class="grid g-3 up" style="gap:20px">
+          <div class="tile"><div class="v">1M&nbsp;🇨🇴</div><div class="l">customers, Colombia’s first month</div></div>
+          <div class="tile"><div class="v">7</div><div class="l">designers led</div></div>
+          <div class="tile"><div class="v">3</div><div class="l">retention products</div></div>
+        </div>
+      </div>
+      <div class="up shot"><img src="deck-life-assets/bitso-press.png" alt="Reuters — Bitso launches in Colombia" style="width:100%;display:block"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 CASAI -->
+<section class="slide" data-slide="8" data-label="Casai" data-anim="entrance">
+  <span class="chip"><b>07</b> Casai · UX Manager · 2020–21</span>
+  <div class="inner">
+    <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(28px,4vw,68px);align-items:center">
+      <div>
+        <div class="kicker up">Hospitality · a16z-backed</div>
+        <h2 class="head up" style="margin:.3em 0 .5em;max-width:15ch">Built a design culture <span class="serif accent-t">from zero.</span></h2>
+        <p class="lead up" style="max-width:36ch;margin-bottom:1.4em">Hired to fix the fundamentals — built a booking site, a concierge app, a research practice, and a team to run it.</p>
+        <div class="grid up" style="grid-template-columns:1fr 1fr;gap:24px;max-width:440px">
+          <div class="tile"><div class="v">63→600+</div><div class="l">units in my tenure</div></div>
+          <div class="tile"><div class="v">4.8</div><div class="l">guest CSAT</div></div>
+        </div>
+      </div>
+      <div class="up shot"><img src="deck-life-assets/casai-press.png" alt="TechCrunch — Casai raises $23 million" style="width:100%;display:block"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 INCODE · starter numbers/ideas — Bryant to refine; no asset yet -->
+<section class="slide" data-slide="9" data-label="Incode" data-anim="entrance">
+  <span class="chip"><b>08</b> Incode · Experience Design Manager · 2024–present</span>
+  <div class="inner">
+    <div style="display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(28px,4vw,68px);align-items:center">
+      <div>
+        <div class="kicker up">Identity verification · Enterprise SaaS</div>
+        <h2 class="head up" style="margin:.3em 0 .5em;max-width:15ch">Trust at <span class="serif accent-t">enterprise scale.</span></h2>
+        <p class="lead up" style="max-width:38ch;margin-bottom:1.4em">Design leadership for enterprise platforms while figuring out where design sits in the AI tectonic shift.</p>
+        <div class="grid g-3 up" style="gap:20px">
+          <div class="tile"><div class="v">1st</div><div class="l">fully accessibility-compliant, AI-native design system</div></div>
+          <div class="tile"><div class="v">+40%</div><div class="l">Design IC growth in one year</div></div>
+          <div class="tile"><div class="v">90%</div><div class="l">achieved post-acquisition gross-margin goal</div></div>
+        </div>
+      </div>
+      <div class="up" style="display:grid;place-items:center;padding:0 clamp(10px,3vw,40px)"><img src="deck-life-assets/incode-logo.png" alt="Incode" style="width:100%;max-width:440px;display:block"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 CLOSE -->
+<section class="slide pop" data-slide="10" data-label="Closing" data-anim="ripple">
   <svg class="mark2" viewBox="0 0 600 600" style="position:absolute;right:-12%;bottom:-26%;width:min(108vh,1160px);z-index:0;overflow:visible">
     <circle class="rp" cx="300" cy="300" r="86" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="2.5"/>
     <circle class="rp" cx="300" cy="300" r="156" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2.5"/>
@@ -382,21 +296,17 @@ h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-
     <circle class="rp-node" cx="300" cy="300" r="12" fill="#fff"/>
   </svg>
   <div class="inner between" style="z-index:1">
-    <div class="kicker" data-cv>Available for design leadership roles</div>
-    <h1 class="huge" style="font-size:clamp(2.8rem,8.5vw,8.5rem);max-width:14ch">
+    <h1 class="huge" style="font-size:clamp(2.8rem,8.5vw,8.5rem);max-width:14ch;margin-top:.1em">
       <span class="lmask"><span class="ll">Let’s make trust</span></span>
       <span class="lmask"><span class="ll"><span class="serif">tangible.</span></span></span>
     </h1>
-    <div class="row between wrap gap" data-cv style="align-items:flex-end">
-      <p class="lead" style="color:#fff;max-width:26ch;font-weight:500">The product, and the team that keeps earning it.</p>
-      <div style="font-family:'Inter';font-size:.9rem;color:#fff;text-align:right;opacity:.92">Bryant Castro<br>iambri.xyz · linkedin.com/in/bryant-c</div>
-    </div>
+    <p class="lead" data-cv style="color:#fff;max-width:26ch;font-size:1rem;font-weight:500">By building the product, and the team that keeps earning it.</p>
   </div>
 </section>
 
 </div>
 <button class="fs-btn" id="fsBtn">⤢</button>
-<div class="counter"><span id="cur">01</span> / <span id="tot">12</span></div>
+<div class="counter"><span id="cur">01</span> / <span id="tot">10</span></div>
 <div class="hint"><b>← →</b> navigate · <b>R</b> replay · <b>F</b> fullscreen · <b>G</b> index</div>
 <div class="index" id="index"><h4>Bryant Castro · illustrated cut — index</h4><div class="list" id="indexList"></div></div>
 
@@ -416,103 +326,32 @@ const A={
   lines(r){const tl=gsap.timeline();tl.from(q(r,'.ll'),{yPercent:112,duration:.85,stagger:.11,ease:'power4.out'}).from(q(r,'[data-cv]'),{opacity:0,y:14,duration:.55,stagger:.1},'-=.45');return tl;},
   entrance(r){return gsap.from(q(r,'.up'),{y:26,opacity:0,duration:.7,stagger:.07,ease:'power3.out'});},
   count(r){gsap.from(q(r,'.up'),{y:22,opacity:0,duration:.6,stagger:.08,ease:'power3.out'});q(r,'[data-count]').forEach(e=>{const end=+e.dataset.count,dec=+(e.dataset.dec||0),suf=e.dataset.suf||'',pre=e.dataset.pre||'';const o={v:0};gsap.to(o,{v:end,duration:1.5,ease:'power2.out',onUpdate(){e.textContent=pre+o.v.toFixed(dec)+suf;}});});},
-  cover(r){
-    // zoom-to-normal + rings draw in + labels resolve last (no spin)
-    const orbit=r.querySelector('.mark-orbit');
-    const rings=q(r,'.ring'), labels=q(r,'.mk-label');
-    gsap.killTweensOf([orbit,...rings,...labels]);
-    const tl=gsap.timeline();
-    tl.from(q(r,'.ll'),{yPercent:112,duration:.8,stagger:.1,ease:'power4.out'},0);
-    tl.from(q(r,'[data-cv]'),{opacity:0,y:14,duration:.55,stagger:.1},'-=.4');
-    gsap.set(orbit,{svgOrigin:'1423 540',scale:2.6,opacity:0.16});
-    rings.forEach(c=>{const len=c.getTotalLength();gsap.set(c,{strokeDasharray:len,strokeDashoffset:len});});
-    gsap.set(labels,{opacity:0});
-    tl.to(orbit,{scale:1,duration:2.8,ease:'power3.out'},0.3);
-    tl.to(orbit,{opacity:1,duration:2.2,ease:'power2.out'},'<');
-    rings.forEach((c,i)=> tl.to(c,{strokeDashoffset:0,duration:1.5,ease:'power2.inOut'}, 0.5+i*0.22));
-    tl.to(labels,{opacity:1,duration:.6,stagger:.07,ease:'power1.out'},'-=1.0');
-    return tl;},
-  threshold(r){
-    const g=r.querySelector('.bars'); g.innerHTML='';
-    const n=20, base=320, x0=95, step=44;
-    const heights=[]; for(let i=0;i<n;i++){ let h; if(i<12) h=14+i*3; else if(i<16) h=50+(i-11)*44; else h=18; heights.push(h); }
-    heights[15]=250; // the peak
-    heights.forEach((h,i)=>{const x=x0+i*step; const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
-      rect.setAttribute('x',x); rect.setAttribute('width','7'); rect.setAttribute('y',base); rect.setAttribute('height',0);
-      rect.setAttribute('rx','3.5'); rect.setAttribute('fill', i===15?'var(--coral)':'rgba(255,255,255,.8)'); g.appendChild(rect);
-      gsap.to(rect,{attr:{y:base-h,height:h},duration:.5,delay:.2+i*.05,ease:'power3.out'});});
-    const peak=r.querySelector('.peak'); const px=x0+15*step+3.5, py=base-250-4;
-    gsap.set(peak,{attr:{cx:px,cy:py}});
-    gsap.to(peak,{opacity:1,duration:.3,delay:.2+15*.05+.4});
-    gsap.to(peak,{scale:1.5,transformOrigin:'center',repeat:-1,yoyo:true,duration:1,delay:1.6,ease:'sine.inOut'});
-    gsap.from(q(r,'.kicker,h2,.mono'),{opacity:0,y:16,duration:.6,stagger:.08,ease:'power3.out'});
-  },
   model(r){
     gsap.from(q(r,'.up'),{y:22,opacity:0,duration:.6,stagger:.1,ease:'power3.out'});
-    // clarity: dots converge to a line
     const dots=q(r,'.cl-dot'); dots.forEach((d,i)=>{gsap.fromTo(d,{cy:20+((i*53)%60)},{cy:45,duration:.9,delay:.5+i*.06,ease:'power2.inOut'});});
-    // craft: rough fades, smooth draws
     const rough=r.querySelector('.cr-rough'), smooth=r.querySelector('.cr-smooth');
     gsap.to(rough,{opacity:0,duration:.6,delay:1.1}); drawIn(smooth,1,.7);
-    // compounding: curve draws + dot rides
     const curve=r.querySelector('.cp-curve'), dot=r.querySelector('.cp-dot');
     drawIn(curve,1.1,.6);
     if(window.MotionPathPlugin){gsap.to(dot,{duration:1.1,delay:.6,ease:'power2.in',motionPath:{path:'.cp-curve',align:'.cp-curve',alignOrigin:[.5,.5]}});}
   },
-  journey(r){
-    gsap.from(q(r,'[data-cv]'),{opacity:0,y:16,duration:.6,stagger:.08,ease:'power3.out'});
-    gsap.from(r.querySelector('.aa-panel'),{opacity:0,x:20,duration:.7,ease:'power3.out'});
-    const dot=r.querySelector('#aadot'), imgs=q(r,'.aa-img'), caps=q(r,'.aa-cap');
-    gsap.killTweensOf([dot,...imgs,...caps]);
-    if(!window.MotionPathPlugin)return;
-    const show=(i)=>{imgs.forEach((im,k)=>gsap.to(im,{opacity:k===i?1:0,duration:.6}));caps.forEach((c,k)=>gsap.to(c,{color:k===i?'#FF5A36':'rgba(255,255,255,.35)',duration:.3}));};
-    const tl=gsap.timeline({repeat:-1,repeatDelay:1});
-    tl.to(dot,{duration:4.2,ease:'none',motionPath:{path:'#aaroute',align:'#aaroute',alignOrigin:[.5,.5]}},0)
-      .call(()=>show(0),null,0.0).call(()=>show(1),null,1.6).call(()=>show(2),null,3.2);
-    return tl;
-  },
-  curve(r){
-    gsap.from(q(r,'.up'),{y:20,opacity:0,duration:.6,stagger:.09,ease:'power3.out'});
-    const thr=q(r,'.cv-thr'); gsap.from(thr,{opacity:0,duration:.6,delay:.3});
-    const area=r.querySelector('.cv-area'); gsap.set(area,{opacity:0});
-    drawIn(r.querySelector('.cv-line'),1.6,.4);
-    gsap.to(area,{opacity:1,duration:.9,delay:1.4});
-    const mk=r.querySelector('.cv-mark'); gsap.to(mk,{opacity:1,scale:1.4,transformOrigin:'center',duration:.5,delay:1.5,ease:'back.out(2)'});
-    const dot=r.querySelector('.cv-dot'); gsap.set(dot,{opacity:1});
-    if(window.MotionPathPlugin) gsap.to(dot,{duration:1.7,delay:.4,ease:'power3.in',motionPath:{path:'.cv-line',align:'.cv-line',alignOrigin:[.5,.5]}});
-  },
   network(r){
-    // Storyboard reversed: start large, faint and spinning, then contract +
-    // brighten + decelerate, and the labels resolve in as it settles into the
-    // clear, compact, labeled diagram. "Coming into focus."
+    // Resolve into focus: start large, faint, spinning; contract + brighten +
+    // decelerate as the links draw in and the labels settle. This is the cover.
     const orbit=r.querySelector('.net-orbit');
     const links=q(r,'.net-links path'), nodes=q(r,'.net-n'), hub=r.querySelector('.net-origin');
     const hubT=r.querySelector('.net-origin-t'), labels=q(r,'.net-labels text');
     gsap.killTweensOf([orbit,hub,hubT,...nodes,...labels,...links]);
     A.lines(r); // headline + data-cv reveal
-    // start state: big, dim, rotated (nodes/links already present, fully drawn)
-    gsap.set(orbit,{svgOrigin:'1372.5 531',scale:2.4,rotation:80,opacity:0.16});
+    gsap.set(orbit,{svgOrigin:'1376 527',scale:2.4,rotation:80,opacity:0.16});
     gsap.set([...nodes,hub],{transformOrigin:'50% 50%',scale:1});
     gsap.set([hubT,...labels],{opacity:0});
-    // hide links so they can grow (draw) in as it converges
     links.forEach(p=>{const len=p.getTotalLength();gsap.set(p,{strokeDasharray:len,strokeDashoffset:len});});
     const tl=gsap.timeline();
-    // contract + de-rotate + brighten
     tl.to(orbit,{scale:1,rotation:0,duration:3.2,ease:'power3.out'},0.2);
     tl.to(orbit,{opacity:1,duration:2.4,ease:'power2.out'},'<');
-    // connective lines grow in (radiating from the hub) as it settles
-    links.forEach((p,i)=> tl.to(p,{strokeDashoffset:0,duration:1.0,ease:'power2.inOut'}, 0.6+i*0.11));
-    // labels resolve in last
+    links.forEach((p,i)=> tl.to(p,{strokeDashoffset:0,duration:1.0,ease:'power2.inOut'}, 0.6+i*0.08));
     tl.to([hubT,...labels],{opacity:1,duration:.6,stagger:.04,ease:'power1.out'},'-=0.9');
-    return tl;
-  },
-  divmark(r){
-    const tl=A.lines(r);
-    q(r,'.cst-links path').forEach((p,i)=>drawIn(p,.7,.4+i*.09));
-    const nodes=q(r,'.cst-nodes circle'); gsap.set(nodes,{scale:0,transformOrigin:'center'});
-    gsap.to(nodes,{scale:1,duration:.5,delay:.6,stagger:.08,ease:'back.out(2.2)'});
-    gsap.to(nodes,{scale:1.12,repeat:-1,yoyo:true,duration:1.5,delay:1.6,stagger:{each:.2,from:'random'},transformOrigin:'center',ease:'sine.inOut'});
-    gsap.from(q(r,'.cst-lbl,.cst-labels text'),{opacity:0,duration:.5,stagger:.05,delay:1.1});
     return tl;
   },
   ripple(r){
@@ -524,8 +363,8 @@ const A={
     return tl;
   },
   multiplier(r){
-    // zoom-to-normal, and the tree GROWS outward: root → edges reach out →
-    // branch dots pop → edges reach out → leaf dots pop (staggered, no spin)
+    // zoom-to-normal, and the tree GROWS outward: root → edges → branch dots →
+    // edges → leaf dots (staggered, no spin)
     const orbit=r.querySelector('.tree-orbit');
     const edges=q(r,'.edges path'), root=r.querySelector('.root'), l1=q(r,'.l1'), l2=q(r,'.l2');
     const nodes=[root,...l1,...l2];
@@ -537,11 +376,11 @@ const A={
     const tl=gsap.timeline();
     tl.to(orbit,{scale:1,duration:2.8,ease:'power3.out'},0.2);
     tl.to(orbit,{opacity:1,duration:2.2,ease:'power2.out'},'<');
-    tl.to(root,{scale:1,duration:.5,ease:'back.out(2)'},0.3);                                   // root
-    edges.slice(0,3).forEach((p,i)=> tl.to(p,{strokeDashoffset:0,duration:.9,ease:'power2.inOut'},0.6+i*0.1)); // root→branches
-    tl.to(l1,{scale:1,duration:.5,stagger:.12,ease:'back.out(2.2)'},1.2);                       // branch dots
-    edges.slice(3).forEach((p,i)=> tl.to(p,{strokeDashoffset:0,duration:.9,ease:'power2.inOut'},1.5+i*0.1));   // branches→leaves
-    tl.to(l2,{scale:1,duration:.5,stagger:.09,ease:'back.out(2.2)'},2.0);                       // leaf dots
+    tl.to(root,{scale:1,duration:.5,ease:'back.out(2)'},0.3);
+    edges.slice(0,3).forEach((p,i)=> tl.to(p,{strokeDashoffset:0,duration:.9,ease:'power2.inOut'},0.6+i*0.1));
+    tl.to(l1,{scale:1,duration:.5,stagger:.12,ease:'back.out(2.2)'},1.2);
+    edges.slice(3).forEach((p,i)=> tl.to(p,{strokeDashoffset:0,duration:.9,ease:'power2.inOut'},1.5+i*0.1));
+    tl.to(l2,{scale:1,duration:.5,stagger:.09,ease:'back.out(2.2)'},2.0);
     return tl;
   },
   none(){}
@@ -560,7 +399,6 @@ document.addEventListener('keydown',e=>{
   if(e.key==='g'||e.key==='G')toggleIndex();
   if(e.key==='f'||e.key==='F'){e.preventDefault();toggleFs();}
   if(e.key==='Escape'){closeIndex();if(document.fullscreenElement)document.exitFullscreen();}});
-document.querySelectorAll('.replay').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();run(current);}));
 const fsBtn=document.getElementById('fsBtn');
 function toggleFs(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
 fsBtn.addEventListener('click',e=>{e.stopPropagation();toggleFs();});

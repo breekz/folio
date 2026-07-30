@@ -52,6 +52,13 @@ a{color:inherit}
 .chip:hover{color:var(--ink)}
 .chip:hover::after{right:0}
 .chip .arrow{color:var(--muted);margin-right:7px}
+/* stacked button variant (used for the opening starters) */
+.chips.stacked{flex-direction:column;align-items:flex-start;gap:11px;margin-top:18px}
+.chips.stacked .chip{border:1px solid var(--line);background:#fff;border-radius:13px;padding:.82em 1.2em;
+  font-size:1.03rem;font-weight:500;color:var(--ink);transition:border-color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease)}
+.chips.stacked .chip::after{display:none}
+.chips.stacked .chip:hover{border-color:var(--ink);background:var(--fill);transform:translateY(-1px)}
+.chips.stacked .chip .arrow{color:var(--coral);margin-right:10px}
 
 /* input dock — the center of gravity */
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;
@@ -80,6 +87,10 @@ a{color:inherit}
 .ccard .cc-h{font-size:.82rem;color:var(--ink-2);line-height:1.4}
 .ccard .cc-go{margin-top:8px;font-size:.76rem;font-weight:600;color:var(--coral)}
 @media(max-width:480px){.ccard{grid-template-columns:1fr}.ccard .thumb{min-height:120px}}
+/* visual candy — masonry of loose assets */
+.candy{columns:2;column-gap:12px;margin-top:20px}
+.candy img{width:100%;margin:0 0 12px;border-radius:12px;display:block;border:1px solid var(--line);break-inside:avoid}
+@media(max-width:520px){.candy{columns:1}}
 
 /* case study overlay */
 .overlay{position:fixed;inset:0;z-index:100;background:rgba(20,16,25,.55);backdrop-filter:blur(6px);
@@ -101,6 +112,8 @@ a{color:inherit}
 .sheet .cs-stats div:last-child{border-right:none}
 .sheet .cs-stats .v{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(1.3rem,2.4vw,2rem);letter-spacing:-.02em}
 .sheet .cs-stats .l{font-size:.76rem;color:var(--ink-2);margin-top:7px;line-height:1.3}
+.sheet .cs-stats.n2{grid-template-columns:repeat(2,1fr)}
+.sheet .cs-stats.n3{grid-template-columns:repeat(3,1fr)}
 @media(max-width:720px){.sheet .cs-stats{grid-template-columns:repeat(2,1fr)}.sheet .cs-stats div:nth-child(2){border-right:none}.sheet .cs-stats div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
 .sheet .cs-sec{display:grid;grid-template-columns:180px 1fr;gap:28px;padding:26px 0;border-top:1px solid var(--line)}
 .sheet .cs-sec h3{font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-top:4px}
@@ -174,25 +187,29 @@ function suggest(t){
 function caseCard(slug){ const c=cs[slug]; if(!c) return '';
   return `<a class="ccard" data-open="${c.slug}">
     <div class="thumb" style="background-image:url('${c.cover}')"></div>
-    <div class="cc-body"><div class="cc-ey">${c.company}${c.via?' · '+c.via:''} · ${c.period}</div>
+    <div class="cc-body"><div class="cc-ey">${[c.company,c.via,c.period].filter(Boolean).join(' · ')}</div>
     <div class="cc-t">${c.company}</div><div class="cc-h">${c.hook}</div>
     <div class="cc-go">Open case study →</div></div></a>`; }
 
 function addUser(text){ const el=document.createElement('div'); el.className='msg user'; el.textContent=text; thread.appendChild(el); }
-function chipsEl(ids){ const w=document.createElement('div'); w.className='chips';
+function chipsEl(ids){ const w=document.createElement('div'); w.className='chips stacked';
   ids.forEach(id=>{ const b=document.createElement('button'); b.className='chip'; b.type='button';
     b.innerHTML=`<span class="arrow">→</span>${T[id].chip}`; b.onclick=()=>fromTopic(id); w.appendChild(b); });
   return w; }
 function typingEl(){ const el=document.createElement('div'); el.className='typing'; el.innerHTML='<i></i><i></i><i></i>'; return el; }
 
 let flush=null;
-function botSay(text, {card=null, follow=[], first=false}={}){
+function botSay(text, {card=null, cards=null, images=null, follow=[], first=false, chips=null, autoOpen=null}={}){
   const wrap=document.createElement('div'); wrap.className='msg bot'+(first?' first':'');
   const tp=typingEl(); thread.appendChild(tp); scrollDown();
   const full=fmt(text);
   const finalize=()=>{ wrap.innerHTML=full;
-    if(card){ wrap.insertAdjacentHTML('beforeend', caseCard(card)); bindCards(); }
+    const list=(cards&&cards.length)?cards:(card?[card]:[]);
+    list.forEach(slug=> wrap.insertAdjacentHTML('beforeend', caseCard(slug)));
+    if(list.length) bindCards();
+    if(images&&images.length) wrap.insertAdjacentHTML('beforeend', '<div class="candy">'+images.map(s=>`<img src="${s}" alt="" loading="lazy">`).join('')+'</div>');
     if(follow&&follow.length) thread.appendChild(chipsEl(follow));
+    if(autoOpen) setTimeout(()=>openCase(autoOpen), 350);
     scrollDown(); flush=null; };
   const think=first?260:(300+Math.min(600,text.length*2));
   let timer=setTimeout(()=>{
@@ -208,7 +225,7 @@ function botSay(text, {card=null, follow=[], first=false}={}){
 /* respond to a matched-or-null topic */
 function respond(topic){
   if(topic){ asked.add(topic.id);
-    botSay(pickAnswer(topic), {card:topic.card, follow:suggest(topic)}); }
+    botSay(pickAnswer(topic), {card:topic.card, cards:topic.cards, images:topic.images, follow: suggest(topic), autoOpen: topic.autoOpen}); }
   else { const fb=C.fallbacks[fbIdx++%C.fallbacks.length];
     botSay(fb, {follow:suggest(null)}); }
 }
@@ -220,7 +237,7 @@ function send(text){ if(!text.trim()) return; if(flush) flush(); leaveEmpty();
   addUser(text.trim()); input.value=''; respond(match(text)); }
 /* chip / topic click */
 function fromTopic(id){ const t=T[id]; if(!t) return; if(flush) flush(); leaveEmpty();
-  addUser(t.chip||t.answers[0]); asked.add(id); botSay(pickAnswer(t), {card:t.card, follow:suggest(t)}); }
+  addUser(t.chip||t.answers[0]); asked.add(id); botSay(pickAnswer(t), {card:t.card, cards:t.cards, images:t.images, follow: suggest(t), autoOpen: t.autoOpen}); }
 
 function scrollDown(){ const last=thread.lastElementChild; if(!last) return;
   requestAnimationFrame(()=>{ const r=last.getBoundingClientRect(); const dockH=118;
@@ -231,10 +248,10 @@ function scrollDown(){ const last=thread.lastElementChild; if(!last) return;
 const overlay=$('#overlay'), sheet=$('#sheet');
 function openCase(slug){ const c=cs[slug]; if(!c) return;
   sheet.innerHTML=`<div class="close"><b>${c.company}</b><button data-close>Close ✕</button></div>
-    <div class="sheet-in"><div class="cs-ey">${c.company}${c.via?' · '+c.via:''} · ${c.period} · ${c.role}</div>
+    <div class="sheet-in"><div class="cs-ey">${[c.company,c.via,c.period,c.role].filter(Boolean).join(' · ')}</div>
     <h1>${c.headline}</h1><p class="cs-hook">${c.hook}</p>
     ${c.leadImage?`<figure class="cs-img"><img src="${c.leadImage}" alt="" loading="lazy">${c.leadCap?`<figcaption>${c.leadCap}</figcaption>`:''}</figure>`:''}
-    <div class="cs-stats">${c.stats.map(s=>`<div><div class="v" style="color:${c.accent}">${s.value}</div><div class="l">${s.label}</div></div>`).join('')}</div>
+    ${(c.stats&&c.stats.length)?`<div class="cs-stats n${c.stats.length}">${c.stats.map(s=>`<div><div class="v" style="color:${c.accent}">${s.value}</div><div class="l">${s.label}</div></div>`).join('')}</div>`:''}
     ${c.sections.map(s=>`<div class="cs-sec"><h3>${s.h}</h3><div class="cs-secbody"><p>${fmt(s.b)}</p></div></div>${(s.imgs||[]).map(g=>`<figure class="cs-img"><img src="${g.src}" alt="" loading="lazy">${g.cap?`<figcaption>${g.cap}</figcaption>`:''}</figure>`).join('')}`).join('')}
     <div class="cs-gallery">${c.gallery.map(g=>`<figure><img src="${g.src}" alt="" loading="lazy">${g.cap?`<figcaption>${g.cap}</figcaption>`:''}</figure>`).join('')}</div></div>`;
   overlay.classList.add('on'); document.body.style.overflow='hidden';
@@ -247,7 +264,7 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeCase(); });
 /* ---------- init ---------- */
 $('#dock').addEventListener('submit',e=>{ e.preventDefault(); send(input.value); });
 // greeting: bot speaks first, centered, with a few quiet starters
-botSay(C.greetings[Math.floor(Math.random()*C.greetings.length)], {follow:C.starters, first:true});
+botSay(C.greetings[Math.floor(Math.random()*C.greetings.length)], {follow:C.starters, first:true, chips:'stacked'});
 setTimeout(()=>input.focus(), 500);
 </script>
 </body>

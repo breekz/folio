@@ -74,14 +74,12 @@ window.FOLIO = {
       accent: '#FF5A36',                 // coral
       headline: 'I run the <em>hardest</em> rooms.',
       hook: 'Turned Southeast Asia’s largest low-cost airline from a flights app into a travel marketplace — in a four-day room full of executives who didn’t agree on the problem.',
-      cover: 'deck-airasia-assets/cover.jpg',
+      cover: 'folio/airasia/cover.png',
       leadImage: 'folio/airasia/cover.png',
       tags: ['Facilitation', 'Product Strategy', 'Travel', '0→1'],
       stats: [
         { value: '4 days', label: 'Ambiguity → build-ready product' },
         { value: '1 year', label: 'Engagement contract won' },
-        { value: '13·8·7', label: 'Democratic vote on the real problem' },
-        { value: 'C-suite', label: 'Room aligned end-to-end' },
       ],
       sections: [
         { h: 'The room', b: 'AirAsia wanted to own the whole trip — “AirAsia 3.0” — not just the seat. But the org’s instincts were stuck on flights, the products (hotels, activities, payments) were scattered, and C-level, Commercial, Product, Engineering, Data, Security and UX each had a different idea of the real user problem.' },
@@ -99,6 +97,28 @@ window.FOLIO = {
       pillar: 'Clarity',
     },
     {
+      slug: 'candy',
+      company: 'Visual candy',
+      via: '',
+      period: '',
+      role: '',
+      accent: '#FF5A36',
+      headline: 'Forget the case study.',
+      hook: 'Just a grab-bag of screens and moments from across the work — fintech, sports, POS, identity, a little motion. No process, no metrics, just pixels I’m fond of.',
+      cover: 'folio/candy/amp.png',
+      tags: ['Eye candy'],
+      stats: [],
+      sections: [],
+      gallery: [
+        { src: 'folio/candy/pos.png' },
+        { src: 'folio/candy/miti.png' },
+        { src: 'folio/candy/amp.png' },
+        { src: 'folio/candy/sports.png' },
+        { src: 'folio/candy/divergence.png' },
+      ],
+      pillar: '',
+    },
+    {
       slug: 'casai',
       company: 'Casai',
       via: '',
@@ -107,25 +127,24 @@ window.FOLIO = {
       accent: '#159488',                 // teal
       headline: 'Built a design culture <em>from zero</em>.',
       hook: 'An a16z-backed hospitality startup that had never practiced design. I built the research culture and reframed a redundant app into a concierge guests actually used.',
-      cover: 'folio/casai/cover.jpg',
+      cover: 'folio/casai/cover.png',
+      leadImage: 'folio/casai/cover.png',
       tags: ['Design Leadership', 'Research', 'Hospitality', 'Design Ops'],
       stats: [
         { value: '63 → 600+', label: 'Units during my tenure' },   // VERIFY
-        { value: '~$8M',      label: 'ARR reached' },               // VERIFY
-        { value: '92.85%',    label: 'Check-in success (usability)' },
-        { value: '4.53 / 5',  label: 'Concierge usefulness score' },
+        { value: '4.8',       label: 'Guest CSAT' },
       ],
       sections: [
         { h: 'The mandate', b: 'Casai was reinventing hospitality across Mexico and Brazil — design-led apartments, local experiences, smart-home tech — and scaling fast. It knew it needed design but had never had design as a practice. My mandate: lead the consumer products, build and grow the team, and install a way of working that replaced opinion with evidence.' },
         { h: 'A research practice, not opinions', b: 'I built a broad empathy toolkit — 1:1 interviews, usability testing, contextual inquiry (visiting the actual apartments to watch real guests), surveys, reviews, and diary studies. Instead of demographic personas we anchored on Jobs-to-Be-Done: the real reason people stayed wasn’t their job title, it was wanting the best apartment in the best neighborhood.' },
         { h: 'From pamphlet to platform', b: 'In two quarters the website went from a brochure that only explained what Casai was into a functional product — guests could book, browse listings, and explore the neighborhood around each stay. Then the arrival and in-stay experience consolidated into a single concierge app: find the address and open the gate, check in with the guard, control the apartment, explore, and read a guide for every room.' },
-        { h: 'Outcome', b: 'Validated with 80+ users: 92.85% check-in success, a 4.53/5 usefulness score, 81.8% success on wifi and door-unlock tasks. Beyond the product, I set DesignOps standards, grew and upskilled the team, and moved fluidly between setting direction and doing the hands-on craft — leaving a practice that could run without me.' },
+        { h: 'Outcome', b: 'Validated with real users — high check-in success and a concierge guests rated highly, reflected in a 4.8 guest CSAT. Beyond the product, I set DesignOps standards, grew and upskilled the team, and moved fluidly between setting direction and doing the hands-on craft — leaving a practice that could run without me.' },
       ],
       gallery: [
-        { src: 'folio/casai/city-guide.png',    cap: 'From pamphlet to platform — city guides curated with locals.' },
-        { src: 'folio/casai/jtbd-persona.png',  cap: 'Jobs-to-Be-Done, built from interviews rather than demographics.' },
-        { src: 'folio/casai/concierge-app.png', cap: 'The concierge app — access, check-in, and in-stay control in one place.' },
-        { src: 'folio/casai/outcomes.png',      cap: 'What guests told us — 90% of reviews are five stars.' },
+        { src: 'folio/casai/arrival-1.png' },
+        { src: 'folio/casai/arrival-2.png' },
+        { src: 'folio/casai/arrival-3.png' },
+        { src: 'folio/casai/outcomes.png', cap: 'What guests told us — 90% of reviews are five stars.' },
       ],
       pillar: 'Compounding',
     },
@@ -138,20 +157,19 @@ window.FOLIO = {
       accent: '#EFA820',                    // gold
       headline: 'Made crypto <em>worth trusting</em>.',
       hook: 'Led consumer product design at Latin America’s largest crypto platform — launching a localized market and the retention features that turn a wallet into a habit.',
-      cover: 'deck-life-assets/bitso.png',
+      cover: 'folio/bitso/cover.png',
       leadImage: 'folio/bitso/cover.png',
       tags: ['Fintech', 'Crypto', 'Consumer', 'Growth'],
       stats: [
-        { value: '1M+',  label: 'New customers, first month (Colombia)' },  // VERIFY
-        { value: '3',    label: 'Retention features championed' },
-        { value: '2',    label: 'ICs promoted to Senior in a quarter' },
-        { value: 'LatAm #1', label: 'Largest crypto platform in the region' },
+        { value: '1M 🇨🇴', label: 'Customers, Colombia’s first month' },  // VERIFY
+        { value: '7',     label: 'Designers led' },
+        { value: '3',     label: 'Retention products' },
       ],
       sections: [
         { h: 'The bet', b: 'Crypto is only useful if people trust it enough to keep money there. My job was to grow consumer adoption and retention on the region’s largest platform — and to localize the product for a brand-new market, Colombia.' },
         { h: 'What I did', b: 'Journey mapping and discovery interviews to find where trust broke, then flow prioritization, mid-fi UI, KPIs, content design, and a reusable component set — validated with real users. I championed three retention features: earning yields (Bitso+), recurrent deposits, and recurrent conversions.' },
         { h: 'What shipped', b: 'Bitso Colombia — a localized app tuned to a new market — plus the earn/deposit/convert loop that gives everyday customers a reason to come back rather than trade once and leave.' },
-        { h: 'Outcome & team', b: 'The Colombia launch targeted a million new customers in its first month. Alongside the product, I built the rituals and vision that lifted cross-squad collaboration — and had two individual contributors promoted to Senior in a single quarter.',
+        { h: 'Outcome & team', b: 'The Colombia launch targeted a million new customers in its first month. Leading a team of seven, I built the rituals and vision that lifted cross-squad collaboration — and had two individual contributors promoted to Senior in a single quarter.',
           imgs: [
             { src: 'folio/bitso/flow.png' },
             { src: 'folio/bitso/deposit-co.png' },
@@ -219,7 +237,7 @@ window.FOLIO = {
       'I’m Bryant. Well, a stand-in trained on the real one. Ask me about the work, the way I lead, or trust — that’s the throughline.',
     ],
     placeholder: 'Ask me anything…',
-    starters: ['different', 'best', 'trust'],
+    starters: ['best', 'candy', 'different', 'trust'],
     suggestPool: ['different', 'best', 'leadership', 'trust', 'story', 'career', 'personal', 'looking_for', 'workstyle', 'available'],
     fallbacks: [
       'That one’s not in my repertoire — I’m a stand-in for Bryant, not his whole brain. The real one’s more fun: brycastro89@gmail.com. Meanwhile, I’m good on these:',
@@ -251,7 +269,7 @@ window.FOLIO = {
         ],
         follow:['trust','leadership','best'] },
 
-      { id:'trust', chip:'Why “trust”?',
+      { id:'trust', chip:'How I build with trust in mind',
         triggers:['trust','thesis','philosophy','believe','point of view','anatomy','why trust','worth trusting'],
         answers:[
           'I design the products people *have to* trust — money, identity, travel, home. A product earns trust when it’s three things at once: honest about what it does, legible under pressure, and resilient when the stakes are real. That overlap is the whole job. Trust is a design material, and I treat it like one.',
@@ -272,10 +290,15 @@ window.FOLIO = {
         ],
         follow:['growth','workstyle','conflict'] },
 
-      { id:'best', chip:'Show me your best work',
+      { id:'best', chip:'Show me your best work (case studies)',
         triggers:['best work','show me','portfolio','case study','case studies','projects','work','what have you built','examples','everything','all your work','see your work'],
-        answers:['Four I’m proud of, each proving a different muscle: AirAsia — facilitation and product strategy under pressure. Casai — building a design culture and a research practice from zero. Bitso — growth and trust at fintech scale. TrueMoney — leading a team through a six-million-user overhaul. Which one do you want to open?'],
-        follow:['airasia','casai','bitso'] },
+        answers:['Here are the ones I’d put forward first — each proves a different muscle. Open any of them:'],
+        cards:['airasia','casai','bitso'], follow:['different','trust'] },
+
+      { id:'candy', chip:'Show me the eye candy (UI fire showcase) 🍬',
+        triggers:['eye candy','visual candy','candy','pretty','just show me pixels','visuals','screenshots','random','grab bag','something pretty','no context','forget the case study'],
+        answers:['Here’s some visual candy — I’ll open it for you. Close it whenever and we’ll keep going.'],
+        cards:['candy'], autoOpen:'candy', follow:['best','different','trust'] },
 
       { id:'airasia', chip:'AirAsia',
         triggers:['airasia','air asia','workshop','facilitat','sprint','hardest room','trip planner'],
@@ -284,7 +307,7 @@ window.FOLIO = {
 
       { id:'casai', chip:'Casai',
         triggers:['casai','hospitality','concierge','research culture','design ops','designops','airbnb'],
-        answers:['Casai was reinventing hospitality across Mexico and Brazil and scaling fast, but had never practiced design. I built the research culture — interviews, contextual inquiry in the actual apartments, Jobs-to-Be-Done instead of demographics — and reframed a redundant app into a concierge guests actually used: 92.85% check-in success and a 4.53/5 usefulness score in testing. The real deliverable was a practice that could run without me.'],
+        answers:['Casai was reinventing hospitality across Mexico and Brazil and scaling fast, but had never practiced design. I built the research culture — interviews, contextual inquiry in the actual apartments, Jobs-to-Be-Done instead of demographics — and reframed a redundant app into a concierge guests actually used — validated in testing and reflected in a 4.8 guest CSAT. The real deliverable was a practice that could run without me.'],
         card:'casai', follow:['bitso','research','growth'] },
 
       { id:'bitso', chip:'Bitso',
@@ -319,7 +342,7 @@ window.FOLIO = {
 
       { id:'impact', chip:'What’s your business impact?',
         triggers:['impact','business','metrics','roi','revenue','results','numbers','outcomes','move the needle'],
-        answers:['I lead with scope, not vanity metrics: ~40M people reached across Asia and LatAm, four design teams built, work across four countries. Concrete outcomes — AirAsia’s four-day workshop won a one-year contract; Casai’s concierge tested at 92.85% check-in success; Bitso’s Colombia launch targeted a million new customers in month one; TrueMoney’s overhaul served six million monthly users. Design that moves the business, not just the interface.'],
+        answers:['I lead with scope, not vanity metrics: ~40M people reached across Asia and LatAm, four design teams built, work across four countries. Concrete outcomes — AirAsia’s four-day workshop won a one-year contract; Casai’s concierge earned a 4.8 guest CSAT; Bitso’s Colombia launch targeted a million new customers in month one; TrueMoney’s overhaul served six million monthly users. Design that moves the business, not just the interface.'],
         follow:['best','looking_for','different'] },
 
       { id:'career', chip:'Where have you worked?',

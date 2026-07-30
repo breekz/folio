@@ -293,7 +293,7 @@ window.FOLIO = {
       { id:'best', chip:'Show me your best work (case studies)',
         triggers:['best work','show me','portfolio','case study','case studies','projects','work','what have you built','examples','everything','all your work','see your work'],
         answers:['Here are the ones I’d put forward first — each proves a different muscle. Open any of them:'],
-        cards:['airasia','casai','bitso'], follow:['different','trust'] },
+        cards:['airasia','casai','bitso'], follow:['candy','different','trust'] },
 
       { id:'candy', chip:'Show me the eye candy (UI fire showcase) 🍬',
         triggers:['eye candy','visual candy','candy','pretty','just show me pixels','visuals','screenshots','random','grab bag','something pretty','no context','forget the case study'],

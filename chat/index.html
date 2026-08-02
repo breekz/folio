@@ -31,11 +31,11 @@ a{color:inherit}
 /* messages — no avatars, no chrome; just voice */
 .msg{max-width:92%;animation:rise .5s var(--ease) both}
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.msg.user{align-self:flex-end;background:var(--ink);color:var(--paper);padding:12px 18px;
-  border-radius:19px 19px 5px 19px;max-width:80%;font-weight:500;line-height:1.45}
+.msg.user{align-self:flex-end;background:#fff;color:var(--ink);border:1px solid var(--line);padding:12px 18px;
+  border-radius:19px 19px 5px 19px;max-width:80%;font-size:12px;font-weight:500;line-height:1.45}
 .msg.bot{align-self:flex-start;color:var(--ink);font-size:clamp(.9rem,1.05vw,1rem);line-height:1.66;max-width:100%}
 .msg.bot em{color:var(--coral)}
-.msg.bot.first{font-size:clamp(.98rem,1.35vw,1.18rem);line-height:1.52;font-weight:500;letter-spacing:-.015em}
+.msg.bot.first{font-size:17px;line-height:1.65;font-weight:500;letter-spacing:-.015em}
 .msg.bot.first em{font-size:1.05em}
 
 /* typing */
@@ -54,11 +54,15 @@ a{color:inherit}
 .chip .arrow{color:var(--muted);margin-right:7px}
 /* stacked button variant (used for the opening starters) */
 .chips.stacked{flex-direction:column;align-items:flex-start;gap:10px;margin-top:28px}
-.chips.stacked .chip{border:1px solid var(--line);background:#fff;border-radius:11px;padding:.6em .95em;
-  font-size:.87rem;font-weight:500;letter-spacing:-.005em;color:var(--ink);transition:border-color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease)}
+.chips.stacked .chip{display:inline-flex;align-items:center;gap:10px;border:1px solid transparent;background:none;
+  border-radius:11px;padding:12px 15px;font-size:12px;font-weight:500;letter-spacing:-.005em;line-height:16px;
+  color:var(--ink);transition:background .2s var(--ease),border-color .2s var(--ease),color .2s var(--ease)}
 .chips.stacked .chip::after{display:none}
-.chips.stacked .chip:hover{border-color:var(--ink);background:var(--fill);transform:translateY(-1px)}
-.chips.stacked .chip .arrow{color:var(--coral);margin-right:10px}
+.chips.stacked .chip .arrow{order:2;margin:0;color:var(--coral);display:inline-block;transform-origin:left center;transition:transform .28s var(--ease)}
+.chips.stacked .chip:hover .arrow{transform:scaleX(1.5)}
+/* first suggestion in a list = filled black */
+.chips.stacked .chip:first-child{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chips.stacked .chip:first-child:hover{background:#000}
 
 /* input dock — the center of gravity */
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;transition:right .55s var(--ease);
@@ -83,9 +87,8 @@ a{color:inherit}
 .ccard .thumb{background-size:cover;background-position:center;min-height:110px}
 .ccard .cc-body{padding:14px 16px}
 .ccard .cc-ey{font-size:.64rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
-.ccard .cc-t{font-family:'Bricolage Grotesque';font-weight:800;font-size:1.2rem;letter-spacing:-.02em;line-height:1.05;margin:5px 0 5px}
-.ccard .cc-h{font-size:.82rem;color:var(--ink-2);line-height:1.4}
-.ccard .cc-go{margin-top:8px;font-size:.76rem;font-weight:600;color:var(--coral)}
+.ccard .cc-t{font-family:'Bricolage Grotesque';font-weight:800;font-size:1rem;letter-spacing:-.02em;line-height:1.15;margin:5px 0 5px}
+.ccard .cc-h{font-size:.69rem;color:var(--ink-2);line-height:1.45}
 @media(max-width:480px){.ccard{grid-template-columns:1fr}.ccard .thumb{min-height:120px}}
 /* visual candy — masonry of loose assets */
 .candy{columns:2;column-gap:12px;margin-top:20px}
@@ -196,8 +199,7 @@ function caseCard(slug){ const c=cs[slug]; if(!c) return '';
   return `<a class="ccard" data-open="${c.slug}">
     <div class="thumb" style="background-image:url('${c.cover}')"></div>
     <div class="cc-body"><div class="cc-ey">${[c.company,c.via,c.period].filter(Boolean).join(' · ')}</div>
-    <div class="cc-t">${c.company}</div><div class="cc-h">${c.hook}</div>
-    <div class="cc-go">Open case study →</div></div></a>`; }
+    <div class="cc-t">${c.company}</div><div class="cc-h">${c.hook}</div></div></a>`; }
 
 function addUser(text){ const el=document.createElement('div'); el.className='msg user'; el.textContent=text; thread.appendChild(el); }
 function chipsEl(ids){ const w=document.createElement('div'); w.className='chips stacked';

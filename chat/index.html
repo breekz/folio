@@ -56,7 +56,10 @@ a{color:inherit}
 .chips.stacked{flex-direction:column;align-items:flex-start;gap:10px;margin-top:28px}
 .chips.stacked .chip{display:inline-flex;align-items:center;gap:10px;border:1px solid transparent;background:none;
   border-radius:11px;padding:12px 15px;font-size:12px;font-weight:500;letter-spacing:-.005em;line-height:16px;
-  color:var(--ink);transition:background .2s var(--ease),border-color .2s var(--ease),color .2s var(--ease)}
+  color:var(--ink);transition:background .2s var(--ease),border-color .2s var(--ease),color .2s var(--ease);
+  opacity:0;animation:chip-in .5s var(--ease) both;animation-delay:calc(var(--i,0) * .09s)}
+@keyframes chip-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.chips.stacked .chip{animation-duration:.001s;animation-delay:0s}}
 .chips.stacked .chip::after{display:none}
 .chips.stacked .chip .arrow{order:2;margin:0;color:var(--coral);display:inline-block;transform-origin:left center;transition:transform .28s var(--ease)}
 .chips.stacked .chip:hover .arrow{transform:scaleX(1.5)}
@@ -214,7 +217,8 @@ function caseCard(slug){ const c=cs[slug]; if(!c) return '';
 
 function addUser(text){ const el=document.createElement('div'); el.className='msg user'; el.textContent=text; thread.appendChild(el); }
 function chipsEl(ids){ const w=document.createElement('div'); w.className='chips stacked';
-  ids.forEach(id=>{ const b=document.createElement('button'); b.className='chip'; b.type='button';
+  ids.forEach((id,i)=>{ const b=document.createElement('button'); b.className='chip'; b.type='button';
+    b.style.setProperty('--i', i);                       // stagger index → cascade in one by one
     b.innerHTML=`<span class="arrow">→</span>${T[id].chip}`; b.onclick=()=>fromTopic(id); w.appendChild(b); });
   return w; }
 function typingEl(){ const el=document.createElement('div'); el.className='typing'; el.innerHTML='<i></i><i></i><i></i>'; return el; }

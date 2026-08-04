@@ -139,9 +139,19 @@ html.panel-open .dock{right:min(980px,58vw)}
 .sheet .cs-img figcaption{padding:13px 18px;font-size:.84rem;color:var(--ink-2)}
 .sheet .cs-secbody{min-width:0}
 .sheet .cs-secbody .cs-img{margin:18px 0 0}
+
+/* loading splash — the B blinks while audio arms, then lifts into the chat */
+#splash{position:fixed;inset:0;z-index:300;display:grid;place-items:center;background:var(--paper);
+  cursor:pointer;transition:opacity .7s var(--ease)}
+#splash.gone{opacity:0;pointer-events:none}
+#splash img{width:72px;height:72px;animation:logo-blink 1.15s ease-in-out infinite}
+@keyframes logo-blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.97)}}
+@media(prefers-reduced-motion:reduce){#splash img{animation:none;opacity:.92}}
 </style>
 </head>
 <body>
+
+<div id="splash"><img src="logo.png" alt="Bryant Castro" width="72" height="72"></div>
 
 <main class="stage empty" id="stage">
   <div class="thread" id="thread"></div>
@@ -159,6 +169,7 @@ html.panel-open .dock{right:min(980px,58vw)}
 <div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
 
 <script src="data.js"></script>
+<script src="sound.js"></script>
 <script>
 const F=window.FOLIO, C=F.chat, $=s=>document.querySelector(s);
 const stage=$('#stage'), thread=$('#thread'), input=$('#input');
@@ -214,6 +225,7 @@ function botSay(text, {card=null, cards=null, images=null, follow=[], first=fals
   const tp=typingEl(); thread.appendChild(tp); scrollDown();
   const full=fmt(text);
   const finalize=()=>{ wrap.innerHTML=full;
+    if(window.FolioSound && !first) FolioSound.replyLand();  // reply settles home to D
     const list=(cards&&cards.length)?cards:(card?[card]:[]);
     list.forEach(slug=> wrap.insertAdjacentHTML('beforeend', caseCard(slug)));
     if(list.length) bindCards();
@@ -244,9 +256,11 @@ function leaveEmpty(){ if(stage.classList.contains('empty')) stage.classList.rem
 
 /* typed input */
 function send(text){ if(!text.trim()) return; if(flush) flush(); leaveEmpty();
+  if(window.FolioSound) FolioSound.send();  // rising fifth E4→B4, outbound
   addUser(text.trim()); input.value=''; respond(match(text)); }
 /* chip / topic click */
-function fromTopic(id){ const t=T[id]; if(!t) return; if(flush) flush(); leaveEmpty();
+function fromTopic(id){ const t=T[id]; if(!t) return; if(window.FolioSound) FolioSound.chipClick();
+  if(flush) flush(); leaveEmpty();
   addUser(t.chip||t.answers[0]); asked.add(id); botSay(pickAnswer(t), {card:t.card, cards:t.cards, images:t.images, follow: suggest(t), autoOpen: t.autoOpen}); }
 
 function scrollDown(){ const last=thread.lastElementChild; if(!last) return;
@@ -265,16 +279,38 @@ function openCase(slug){ const c=cs[slug]; if(!c) return;
     ${c.sections.map(s=>`<div class="cs-sec"><h3>${s.h}</h3><div class="cs-secbody"><p>${fmt(s.b)}</p></div></div>${(s.imgs||[]).map(g=>`<figure class="cs-img"><img src="${g.src}" alt="" loading="lazy">${g.cap?`<figcaption>${g.cap}</figcaption>`:''}</figure>`).join('')}`).join('')}
     <div class="cs-gallery">${c.gallery.map(g=>`<figure><img src="${g.src}" alt="" loading="lazy">${g.cap?`<figcaption>${g.cap}</figcaption>`:''}</figure>`).join('')}</div></div>`;
   overlay.classList.add('on'); document.documentElement.classList.add('panel-open');
+  if(window.FolioSound) FolioSound.panelOpen();  // warm drawer sliding open
   sheet.querySelector('[data-close]').onclick=closeCase; overlay.scrollTop=0; }
-function closeCase(){ overlay.classList.remove('on'); document.documentElement.classList.remove('panel-open'); }
-function bindCards(){ document.querySelectorAll('[data-open]').forEach(el=>{ el.onclick=e=>{e.preventDefault();openCase(el.dataset.open);}; }); }
+function closeCase(){ if(!overlay.classList.contains('on')) return;
+  overlay.classList.remove('on'); document.documentElement.classList.remove('panel-open');
+  if(window.FolioSound) FolioSound.panelClose(); }  // the mirror, softer
+function bindCards(){ document.querySelectorAll('[data-open]').forEach(el=>{
+  el.onclick=e=>{e.preventDefault();openCase(el.dataset.open);};
+  el.onpointerenter=()=>{ if(window.FolioSound) FolioSound.hover(); }; }); }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeCase(); });
 
 /* ---------- init ---------- */
 $('#dock').addEventListener('submit',e=>{ e.preventDefault(); send(input.value); });
-// greeting: bot speaks first, centered, with a few quiet starters
-botSay(C.greetings[Math.floor(Math.random()*C.greetings.length)], {follow:C.starters, first:true, chips:'stacked'});
-setTimeout(()=>input.focus(), 500);
+
+// the opening greeting — deferred until the loading splash lifts
+let chatStarted=false;
+function startChat(){ if(chatStarted) return; chatStarted=true;
+  botSay(C.greetings[Math.floor(Math.random()*C.greetings.length)], {follow:C.starters, first:true, chips:'stacked'});
+  setTimeout(()=>input.focus(), 500); }
+
+/* fake load: the B blinks, then the chat reveals with the welcome playing by
+   itself (auto-plays wherever the browser allows it; otherwise it sounds on the
+   visitor's first interaction). */
+(function intro(){
+  const splash=document.getElementById('splash');
+  let done=false;
+  const reveal=()=>{ if(done) return; done=true;
+    if(splash){ splash.classList.add('gone'); setTimeout(()=>splash.remove(), 800); }
+    startChat();
+    if(window.FolioSound) setTimeout(()=>FolioSound.playWelcome(), 140); };
+  if(splash) splash.addEventListener('click', reveal);      // click the B to enter now
+  setTimeout(reveal, 1300);                                 // a quick loader, then reveal + welcome
+})();
 </script>
 </body>
 </html>

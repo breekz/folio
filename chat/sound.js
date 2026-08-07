@@ -429,7 +429,7 @@
 
     var css = document.createElement('style');
     css.textContent = [
-      '#sound-toggle{position:fixed;left:20px;bottom:24px;z-index:120;width:38px;height:38px;',
+      '#sound-toggle{position:fixed;top:18px;right:18px;z-index:120;width:38px;height:38px;',
         'display:grid;place-items:center;padding:0;border-radius:50%;cursor:pointer;',
         'background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);',
         'border:1px solid var(--line,#E2DACB);box-shadow:0 8px 24px -18px rgba(26,21,18,.4);opacity:.5;',
